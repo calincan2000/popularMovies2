@@ -45,10 +45,10 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        Intent intentThatStartedThisAcrivity= getIntent();
-        if(intentThatStartedThisAcrivity.hasExtra(Intent.EXTRA_TEXT))
+        Intent intentThatStartedThisActivity= getIntent();
+        if(intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT))
         {
-           textEntered = intentThatStartedThisAcrivity.getStringExtra(Intent.EXTRA_TEXT);
+           textEntered = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
            mOriginalTitle.setText(movieResultsData.get(Integer.parseInt(textEntered)).getOriginalTitle());
            mOverview.setText(movieResultsData.get(Integer.parseInt(textEntered)).getOverview());
            mReleaseDate.setText(movieResultsData.get(Integer.parseInt(textEntered)).getReleaseDate());
