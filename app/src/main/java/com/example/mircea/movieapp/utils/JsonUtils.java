@@ -48,7 +48,7 @@ public class JsonUtils {
 
     final static String themoviedb_BASE_URL = "https://api.themoviedb.org/3/movie";
     final static String api = "api_key";
-    final static String apiVal = "###";
+    final static String apiVal = "####";
 
 
     public static URL buildUrl(String PopularMovie) {
