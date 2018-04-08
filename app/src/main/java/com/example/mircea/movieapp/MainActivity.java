@@ -172,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements
             public ArrayList<Movie> loadInBackground() {
 
 
-
                 URL movieRequestUrl = JsonUtils.createUrl(searchUrl);
                 String movieSearchResults = null;
                 ArrayList<Movie> movieResultData = new ArrayList<>();
@@ -250,15 +249,15 @@ public class MainActivity extends AppCompatActivity implements
                 mMoviesList.setAdapter(mAdapter);
                 return true;*/
             case R.id.top_rated:
-               searchUrl = JsonUtils.buildUrl(TopRated).toString();
-                getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, MainActivity.this);
-
+                mMovieData = null;
+                searchUrl = JsonUtils.buildUrl(TopRated).toString();
+                getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
                 return true;
 
             case R.id.most_popular:
-               searchUrl = JsonUtils.buildUrl(MostPopular).toString();
-                getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, MainActivity.this);
-
+                mMovieData = null;
+                searchUrl = JsonUtils.buildUrl(MostPopular).toString();
+                getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
                 return true;
 
         }
