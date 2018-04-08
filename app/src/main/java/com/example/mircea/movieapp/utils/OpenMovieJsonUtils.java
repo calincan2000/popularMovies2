@@ -26,6 +26,7 @@ public final class OpenMovieJsonUtils {
     private static final String OVERVIEW = "overview";
     private static final String VOTE_AVERAGE = "vote_average";
     private static final String RELEASE_DATE = "release_date";
+    private static final String ID = "id";
 
     public static List<Movie> parseMovieJson(String json) throws JSONException {
         Movie movie = null;
@@ -44,8 +45,9 @@ public final class OpenMovieJsonUtils {
             String overview = currentMovie.optString(OVERVIEW);
             String vote_average = currentMovie.optString(VOTE_AVERAGE);
             String release_date = currentMovie.optString(RELEASE_DATE);
+            String id = currentMovie.optString(ID);
 
-            movie = new Movie(original_title, base + poster_path, overview, vote_average, release_date);
+            movie = new Movie(original_title, base + poster_path, overview, vote_average, release_date,id);
             movies.add(movie);
 
         }

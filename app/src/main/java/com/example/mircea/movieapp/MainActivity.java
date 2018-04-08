@@ -251,6 +251,8 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.top_rated:
                 mMovieData = null;
                 searchUrl = JsonUtils.buildUrl(TopRated).toString();
+                Log.i(LOG, "xxxxxxxxxxxxb " + searchUrl);
+
                 getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
                 return true;
 

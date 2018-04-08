@@ -21,21 +21,27 @@ package com.example.mircea.movieapp.model;
 public class Movie {
 
     private String originalTitle;
+    private String id;
+
     private String moviePosterImageThumblail;
     private String overview;
     private String vote_average;
     private String releaseDate;
 
     public Movie(String originalTitle, String moviePosterImageThumblail,
-                 String overview, String vote_average, String releaseDate) {
+                 String overview, String vote_average, String releaseDatel,String id) {
         this.originalTitle = originalTitle;
         this.moviePosterImageThumblail = moviePosterImageThumblail;
         this.overview = overview;
         this.vote_average = vote_average;
         this.releaseDate = releaseDate;
+        this.id = id;
+
     }
 
     public String getOriginalTitle(){return originalTitle;}
+    public String getId(){return id;}
+
     public String getMoviePosterImageThumblail(){return moviePosterImageThumblail;}
     public String getOverview(){return overview;}
     public String getVote_average(){return vote_average;}
