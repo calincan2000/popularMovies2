@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">MovieApp</string>
+    <!--title of the menu item, "Reset"-->
+    <string name="Reset">Reset</string>
+    <string name="MostPopular">Most Popular</string>
+    <string name="TopRated">Top Rated</string>
+    <string name="error_message">Failed to get results, please try again.</string>
+
+    <!-- Detail Activity-->
+    <string name="original_title">original title </string>
+    <string name="detail_picture_content_description">movie poster image thumbnail</string>
+    <string name="detail_overview">A plot synopsis (called overview in the api)</string>
+    <string name="detail_vote_average">user rating (called vote_average in the api)</string>
+    <string name="detail_release_date">release date</string>
+    <string name="original_title1">Original Title: </string>
+    <string name="detail_overview1">A plot synopsis:</string>
+    <string name="detail_vote_average1">User Rating:</string>
+    <string name="detail_release_date1">Release Date:</string>
+
+
+</resources>
