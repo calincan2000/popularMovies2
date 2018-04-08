@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements
 
     String TopRated = "top_rated";
     String MostPopular = "popular";
-    String searchUrl = JsonUtils.buildUrl(MostPopular).toString();
+    String searchUrl = JsonUtils.buildUrl(TopRated).toString();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,10 +251,14 @@ public class MainActivity extends AppCompatActivity implements
                 return true;*/
             case R.id.top_rated:
                searchUrl = JsonUtils.buildUrl(TopRated).toString();
+                getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, MainActivity.this);
+
                 return true;
 
             case R.id.most_popular:
                searchUrl = JsonUtils.buildUrl(MostPopular).toString();
+                getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, MainActivity.this);
+
                 return true;
 
         }
