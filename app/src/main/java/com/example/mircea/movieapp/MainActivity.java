@@ -112,13 +112,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    private void showJsonData() {
+    public void showJsonData() {
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         //what you want to show
         mMoviesList.setVisibility(View.VISIBLE);
     }
 
-    private void showErrorMessage() {
+    public void showErrorMessage() {
         // Then, show the error
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
         mMoviesList.setVisibility(View.INVISIBLE);
@@ -212,6 +212,8 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> data) {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
         mAdapter.setMovieData(data);
+
+
         if (data != null) {
             showJsonData();
         } else {

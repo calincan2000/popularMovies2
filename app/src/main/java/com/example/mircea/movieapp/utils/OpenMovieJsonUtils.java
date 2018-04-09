@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,9 @@ public final class OpenMovieJsonUtils {
     private static final String VOTE_AVERAGE = "vote_average";
     private static final String RELEASE_DATE = "release_date";
     private static final String ID = "id";
+    private static final String KEY = "key";
+    private static final String URL = "url";
+
 
     public static List<Movie> parseMovieJson(String json) throws JSONException {
         Movie movie = null;
@@ -47,7 +51,7 @@ public final class OpenMovieJsonUtils {
             String release_date = currentMovie.optString(RELEASE_DATE);
             String id = currentMovie.optString(ID);
 
-            movie = new Movie(original_title, base + poster_path, overview, vote_average, release_date,id);
+            movie = new Movie(original_title, base + poster_path, overview, vote_average, release_date, id);
             movies.add(movie);
 
         }
@@ -55,4 +59,44 @@ public final class OpenMovieJsonUtils {
         return movies;
 
     }
+
+    public static String[] getSimpleTrailersStringsFromJson(String forecastJsonStr)
+            throws JSONException {
+
+
+        /* String array to hold each day's weather String */
+
+        JSONObject forecastJson = new JSONObject(forecastJsonStr);
+        JSONArray movieArray = forecastJson.getJSONArray(OWN_LIST);
+        String[] parsedTrailersData = new String[movieArray.length()];
+
+        for (int i = 0; i < movieArray.length(); i++) {
+
+            JSONObject currentMovie = movieArray.getJSONObject(i);
+            String key = currentMovie.optString(KEY);
+            parsedTrailersData[i] = "https://www.youtube.com/watch?v=" + key;
+
+        }
+        return parsedTrailersData;
+    }
+    public static String[] getSimpleReviewsStringsFromJson(String forecastJsonStr)
+            throws JSONException {
+
+
+        /* String array to hold each day's weather String */
+
+        JSONObject forecastJson = new JSONObject(forecastJsonStr);
+        JSONArray movieArray = forecastJson.getJSONArray(OWN_LIST);
+        String[] parsedTrailersData = new String[movieArray.length()];
+
+        for (int i = 0; i < movieArray.length(); i++) {
+
+            JSONObject currentMovie = movieArray.getJSONObject(i);
+            String url = currentMovie.optString(URL);
+            parsedTrailersData[i] = url;
+
+        }
+        return parsedTrailersData;
+    }
+
 }
