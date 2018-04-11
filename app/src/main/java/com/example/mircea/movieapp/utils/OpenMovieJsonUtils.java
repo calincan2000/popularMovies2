@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.mircea.movieapp.model.Movie;
+import com.example.mircea.movieapp.model.Trailers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,6 +61,31 @@ public final class OpenMovieJsonUtils {
 
     }
 
+    public static List<Trailers> parseTrailersJson(String json) throws JSONException {
+        Trailers movie = null;
+        List<Trailers> movies = null;
+        String base = "http://image.tmdb.org/t/p/w185/";
+        movies = new ArrayList<>();
+
+        JSONObject forecastJson = new JSONObject(json);
+        JSONArray movieArray = forecastJson.getJSONArray(OWN_LIST);
+        for (int i = 0; i < movieArray.length(); i++) {
+
+            JSONObject currentMovie = movieArray.getJSONObject(i);
+
+            String key = currentMovie.optString(KEY);
+            String trailers = "https://www.youtube.com/watch?v=" + key;
+            String poster_path = "http://img.youtube.com/vi/"+key+"/sddefault.jpg";
+
+
+            movie = new Trailers(trailers, poster_path);
+            movies.add(movie);
+
+        }
+
+        return movies;
+
+    }
     public static String[] getSimpleTrailersStringsFromJson(String forecastJsonStr)
             throws JSONException {
 
@@ -78,7 +104,9 @@ public final class OpenMovieJsonUtils {
 
         }
         return parsedTrailersData;
+
     }
+
     public static String[] getSimpleReviewsStringsFromJson(String forecastJsonStr)
             throws JSONException {
 
@@ -86,17 +114,29 @@ public final class OpenMovieJsonUtils {
         /* String array to hold each day's weather String */
 
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
-        JSONArray movieArray = forecastJson.getJSONArray(OWN_LIST);
-        String[] parsedTrailersData = new String[movieArray.length()];
+        JSONArray movieArray = null;
+        String[] parsedTrailersData=null;
 
-        for (int i = 0; i < movieArray.length(); i++) {
+        if (forecastJson.getJSONArray(OWN_LIST).length() != 0) {
+            movieArray = forecastJson.getJSONArray(OWN_LIST);
+            parsedTrailersData = new String[movieArray.length()];
+            for (int i = 0; i < movieArray.length(); i++) {
 
-            JSONObject currentMovie = movieArray.getJSONObject(i);
-            String url = currentMovie.optString(URL);
-            parsedTrailersData[i] = url;
+                JSONObject currentMovie = movieArray.getJSONObject(i);
+                String url = currentMovie.optString(URL);
+                parsedTrailersData[i] = url;
+
+
+            }
+
+        return parsedTrailersData;
+        }else{
+            parsedTrailersData = new String[1];
+
+            parsedTrailersData[0]=" No reviews to show ";
+            return parsedTrailersData;
 
         }
-        return parsedTrailersData;
     }
 
 }

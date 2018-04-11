@@ -2,27 +2,37 @@ package com.example.mircea.movieapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mircea.movieapp.Adapter.MovieAdapter;
+import com.example.mircea.movieapp.Adapter.TrailerAdapter;
 import com.example.mircea.movieapp.model.Movie;
+import com.example.mircea.movieapp.model.Trailers;
 import com.example.mircea.movieapp.utils.JsonUtils;
 import com.example.mircea.movieapp.utils.OpenMovieJsonUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailActivity extends AppCompatActivity{
+public class DetailActivity extends AppCompatActivity
+        implements TrailerAdapter.TrailerAdapterOnClickHandler {
 
     @BindView(R.id.image_iv)
     ImageView mImageDetail;
@@ -34,9 +44,13 @@ public class DetailActivity extends AppCompatActivity{
     TextView mVoteAverage;
     @BindView(R.id.release_date)
     TextView mReleaseDate;
+    @BindView(R.id.trailers)
+    RecyclerView mTrailers;
 
+    private TrailerAdapter mAdapter;
     private static final String LOG = MovieAdapter.class.getSimpleName();
     public List<Movie> movieResultsData = MainActivity.mMovieData;
+    public static ArrayList<Trailers> mTrailersData = null;
     public String textEntered = null;
     private Context mContext;
     String idx = null;
@@ -56,20 +70,30 @@ public class DetailActivity extends AppCompatActivity{
             mOverview.setText(movieResultsData.get(Integer.parseInt(textEntered)).getOverview());
             mReleaseDate.setText(movieResultsData.get(Integer.parseInt(textEntered)).getReleaseDate());
             mVoteAverage.setText(movieResultsData.get(Integer.parseInt(textEntered)).getVote_average());
-            Picasso.with(mContext).load(movieResultsData.get(Integer.parseInt(textEntered)).getMoviePosterImageThumblail())
+            Picasso.get().load(movieResultsData.get(Integer.parseInt(textEntered)).getMoviePosterImageThumblail())
                     .placeholder(R.drawable.user_placeholder)
                     .error(R.drawable.user_placeholder_error)
                     .into(mImageDetail);
             idx = movieResultsData.get(Integer.parseInt(textEntered)).getId();
             Log.i(LOG, "xxxxxxxxxxxxbid " + idx);
 
-            getSupportLoaderManager().initLoader(0,null,TrailerResultLoaderListener);
-            getSupportLoaderManager().initLoader(1,null,ReviewsResultLoaderListener);
+            LinearLayoutManager layoutManager =
+                    new LinearLayoutManager(DetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
+            mTrailers.setLayoutManager(layoutManager);
+            /*
+         * Use this setting to improve performance if you know that changes in content do not
+         * change the child layout size in the RecyclerView
+         */
+            mTrailers.setHasFixedSize(true);
+            mAdapter = new TrailerAdapter(DetailActivity.this, new ArrayList<Trailers>(), DetailActivity.this);
+            mTrailers.setAdapter(mAdapter);
+
+            getSupportLoaderManager().initLoader(0, null, TrailerLoaderListener);
+            getSupportLoaderManager().initLoader(1, null, ReviewsResultLoaderListener);
 
 
         }
     }
-
 
 
     private LoaderManager.LoaderCallbacks<String[]> TrailerResultLoaderListener
@@ -92,7 +116,7 @@ public class DetailActivity extends AppCompatActivity{
 
                 @Override
                 public String[] loadInBackground() {
-                    URL TrailerRequestUrl = JsonUtils.createUrl(JsonUtils.buildUrl(idx+"/videos").toString());
+                    URL TrailerRequestUrl = JsonUtils.createUrl(JsonUtils.buildUrl(idx + "/videos").toString());
                     String TrailerSearchResults = null;
 
 
@@ -153,7 +177,7 @@ public class DetailActivity extends AppCompatActivity{
 
                 @Override
                 public String[] loadInBackground() {
-                    URL ReviewsRequestUrl = JsonUtils.createUrl(JsonUtils.buildUrl(idx+"/reviews").toString());
+                    URL ReviewsRequestUrl = JsonUtils.createUrl(JsonUtils.buildUrl(idx + "/reviews").toString());
                     String ReviewsSearchResults = null;
 
 
@@ -196,5 +220,64 @@ public class DetailActivity extends AppCompatActivity{
         }
     };
 
+    private LoaderManager.LoaderCallbacks<ArrayList<Trailers>> TrailerLoaderListener
+            = new LoaderManager.LoaderCallbacks<ArrayList<Trailers>>() {
 
+        @Override
+        public Loader<ArrayList<Trailers>> onCreateLoader(int id, Bundle args) {
+            return new AsyncTaskLoader<ArrayList<Trailers>>(DetailActivity.this) {
+
+                @Override
+                protected void onStartLoading() {
+                 /*   if (mTrailersData != null) {
+                        mTrailersData=null;
+                    } else {
+                        // mLoadingIndicator.setVisibility(View.VISIBLE);*/
+                        forceLoad();
+
+                }
+
+                @Override
+                public ArrayList<Trailers> loadInBackground() {
+                    URL TrailerRequestUrl = JsonUtils.createUrl(JsonUtils.buildUrl(idx + "/videos").toString());
+                    String trailerSearchResults = null;
+                    ArrayList<Trailers> trailerResultData = new ArrayList<>();
+
+                    try {
+                        trailerSearchResults = JsonUtils
+                                .getResponseFromHttpUrl(TrailerRequestUrl);
+                        trailerResultData.addAll(OpenMovieJsonUtils.parseTrailersJson(trailerSearchResults));
+
+                        return trailerResultData;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
+                public void deliverResult(ArrayList<Trailers> data) {
+                    mTrailersData = data;
+                    super.deliverResult(data);
+                }
+            };
+        }
+
+        @Override
+        public void onLoadFinished(Loader<ArrayList<Trailers>> loader, ArrayList<Trailers> data) {
+            mAdapter.setMovieData(data);
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<ArrayList<Trailers>> loader) {
+
+        }
+    };
+
+
+    @Override
+    public void onClick(String movieItem) {
+
+    }
 }

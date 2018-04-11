@@ -1,14 +1,14 @@
-package com.example.mircea.movieapp;
+package com.example.mircea.movieapp.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.view.View.OnClickListener;
 
+import com.example.mircea.movieapp.R;
 import com.example.mircea.movieapp.model.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -80,7 +80,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         Movie movieItem=mMoviesList.get(position);
        // Log.i(LOG, "#" + position);
         //holder.gridItemMovieView.setText(movieItem);
-        Picasso.with(mContext).load(movieItem.getMoviePosterImageThumblail())
+        Picasso.get().load(movieItem.getMoviePosterImageThumblail())
                 .placeholder(R.drawable.user_placeholder)
                 .error(R.drawable.user_placeholder_error)
                 .into(holder.gridItemMovieView);

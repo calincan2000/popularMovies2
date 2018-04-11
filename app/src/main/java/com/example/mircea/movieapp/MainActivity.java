@@ -2,7 +2,6 @@ package com.example.mircea.movieapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -18,13 +17,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mircea.movieapp.Adapter.MovieAdapter;
 import com.example.mircea.movieapp.model.Movie;
 import com.example.mircea.movieapp.utils.JsonUtils;
 import com.example.mircea.movieapp.utils.OpenMovieJsonUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
