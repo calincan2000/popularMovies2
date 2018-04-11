@@ -78,7 +78,7 @@ public class DetailActivity extends AppCompatActivity
             Log.i(LOG, "xxxxxxxxxxxxbid " + idx);
 
             LinearLayoutManager layoutManager =
-                    new LinearLayoutManager(DetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
+                    new LinearLayoutManager(DetailActivity.this,LinearLayoutManager.VERTICAL,false);
             mTrailers.setLayoutManager(layoutManager);
             /*
          * Use this setting to improve performance if you know that changes in content do not
