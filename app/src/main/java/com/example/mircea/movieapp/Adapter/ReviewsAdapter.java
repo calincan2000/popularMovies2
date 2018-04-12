@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.mircea.movieapp.R;
-import com.example.mircea.movieapp.model.Trailers;
+import com.example.mircea.movieapp.model.Review;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,27 +18,30 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailersAdapterViewHolder> {
+public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsAdapterViewHolder> {
 
-    private static final String LOG = TrailerAdapter.class.getSimpleName();
-    private List<Trailers> mTrailersList;
+    private static final String LOG = ReviewsAdapter.class.getSimpleName();
+    private List<Review> mReviewsList;
     private Context mContext;
+    private int previousExpandedPosition = -1;
+    private int mExpandedPosition = -1;
 
 
-    private final TrailerAdapterOnClickHandler mClickHandler;
+    private final ReviewAdapterOnClickHandler mClickHandler;
 
-    public interface TrailerAdapterOnClickHandler {
-        void onClick(String TrailerItem);
+    public interface ReviewAdapterOnClickHandler {
+        void onClick(String ReviewItem);
     }
 
     // Add an interface called ListItemClickListener
     // Within that interface, define a void method called onListItemClick that takes an int as a parameter
 
-    public TrailerAdapter(Context context, List<Trailers> mTrailersList, TrailerAdapterOnClickHandler clickHandler) {
-       mClickHandler=clickHandler;
-       this.mTrailersList =mTrailersList;
-       this.mContext=context;
+    public ReviewsAdapter(Context context, List<Review> mReviewsList, ReviewAdapterOnClickHandler clickHandler) {
+        mClickHandler = clickHandler;
+        this.mReviewsList = mReviewsList;
+        this.mContext = context;
     }
+
     /**
      * This gets called when each new ViewHolder is created. This happens when the RecyclerView
      * is laid out. Enough ViewHolders will be created to fill the screen and allow for scrolling.
@@ -52,14 +55,14 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
      */
 
     @Override
-    public TrailersAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public ReviewsAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
-        int layoutIdForListItem = R.layout.trailers_list_item;
+        int layoutIdForListItem = R.layout.reviews_list_item;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
 
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately);
-        return new TrailersAdapterViewHolder(view);
+        return new ReviewsAdapterViewHolder(view);
     }
 
     /**
@@ -75,16 +78,30 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
 
 
     @Override
-    public void onBindViewHolder(TrailersAdapterViewHolder holder, int position) {
-        Trailers trailerItem= mTrailersList.get(position);
-       // Log.i(LOG, "#" + position);
-       // holder.listItemReviewView.setText(trailerItem);
-        Picasso.get().load(trailerItem.getMoviePosterImageThumblail())
+    public void onBindViewHolder(ReviewsAdapterViewHolder holder, final int position) {
+       Review reviewItem= mReviewsList.get(position);
+       /*// Log.i(LOG, "#" + position);
+        //holder.listItemReviewView.setText(reviewItem);
+        Picasso.get().load(reviewItem.getMoviePosterImageThumblail())
                 .placeholder(R.drawable.user_placeholder)
                 .error(R.drawable.user_placeholder_error)
-                .into(holder.listItemTrailerView);
+                .into(holder.listItemReviewView);*/
 
+        final boolean isExpanded = position == mExpandedPosition;
+        holder.listItemReviewView.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.itemView.setActivated(isExpanded);
 
+        if (isExpanded)
+            previousExpandedPosition = position;
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mExpandedPosition = isExpanded ? -1 : position;
+                notifyItemChanged(previousExpandedPosition);
+                notifyItemChanged(position);
+            }
+        });
 
 
     }
@@ -96,7 +113,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
 
     @Override
     public int getItemCount() {
-        return (null != mTrailersList ? mTrailersList.size() : 0);
+        return (null != mReviewsList ? mReviewsList.size() : 0);
     }
 
 
@@ -104,14 +121,14 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
      * Cache of the children views for a list item.
      */
 
-    public class TrailersAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
+    public class ReviewsAdapterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
         @BindView(R.id.thumbnail)
-        ImageView listItemTrailerView;
+        TextView listItemReviewView;
 
-        public TrailersAdapterViewHolder(View view) {
+        public ReviewsAdapterViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this,view);
+            ButterKnife.bind(this, view);
             view.setOnClickListener(this);
 
         }
@@ -119,24 +136,25 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
-            String movieItem = String.valueOf(adapterPosition);
-            mClickHandler.onClick(movieItem);
+            String reviewItem = String.valueOf(adapterPosition);
+            mClickHandler.onClick(reviewItem);
+
 
         }
 
 
     }
+
     /**
      * This method is used to set the movie forecast on a ForecastAdapter if we've already
      * created one. This is handy when we get new data from the web but don't want to create a
      * new MovieAdapter to display it.
      *
-     * @param movieData The new movie data to be displayed.
+     * @param reviewData The new movie data to be displayed.
      */
 
-    public void setTrailersData(List<Trailers> movieData)
-    {
-        mTrailersList =movieData;
+    public void setTrailersData(List<Review> reviewData) {
+        mReviewsList = reviewData;
         notifyDataSetChanged();
     }
 }

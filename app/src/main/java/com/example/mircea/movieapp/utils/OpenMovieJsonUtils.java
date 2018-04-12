@@ -1,17 +1,15 @@
 package com.example.mircea.movieapp.utils;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.util.Log;
 
 import com.example.mircea.movieapp.model.Movie;
+import com.example.mircea.movieapp.model.Review;
 import com.example.mircea.movieapp.model.Trailers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +29,7 @@ public final class OpenMovieJsonUtils {
     private static final String ID = "id";
     private static final String KEY = "key";
     private static final String URL = "url";
+    private static final String CONTENT = "content";
 
 
     public static List<Movie> parseMovieJson(String json) throws JSONException {
@@ -75,7 +74,7 @@ public final class OpenMovieJsonUtils {
 
             String key = currentMovie.optString(KEY);
             String trailers = "https://www.youtube.com/watch?v=" + key;
-            String poster_path = "http://img.youtube.com/vi/"+key+"/sddefault.jpg";
+            String poster_path = "http://img.youtube.com/vi/" + key + "/sddefault.jpg";
 
 
             movie = new Trailers(trailers, poster_path);
@@ -86,6 +85,7 @@ public final class OpenMovieJsonUtils {
         return movies;
 
     }
+
     public static String[] getSimpleTrailersStringsFromJson(String forecastJsonStr)
             throws JSONException {
 
@@ -107,6 +107,30 @@ public final class OpenMovieJsonUtils {
 
     }
 
+    public static List<Review> parseReviewsJson(String json)
+            throws JSONException {
+        Review review = null;
+        List<Review> reviews = null;
+        String base = "http://image.tmdb.org/t/p/w185/";
+        reviews = new ArrayList<>();
+
+        JSONObject forecastJson = new JSONObject(json);
+        JSONArray movieArray = forecastJson.getJSONArray(OWN_LIST);
+        for (int i = 0; i < movieArray.length(); i++) {
+
+            JSONObject currentMovie = movieArray.getJSONObject(i);
+            String content= currentMovie.optString(CONTENT);
+            String url = currentMovie.optString(URL);
+
+
+            review = new Review(content, url);
+            reviews.add(review);
+
+        }
+
+        return reviews;
+    }
+
     public static String[] getSimpleReviewsStringsFromJson(String forecastJsonStr)
             throws JSONException {
 
@@ -115,10 +139,12 @@ public final class OpenMovieJsonUtils {
 
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
         JSONArray movieArray = null;
-        String[] parsedTrailersData=null;
+        String[] parsedTrailersData = null;
 
         if (forecastJson.getJSONArray(OWN_LIST).length() != 0) {
             movieArray = forecastJson.getJSONArray(OWN_LIST);
+            Log.i(LOG, "xxxxxxxxxxxxb1 " + movieArray.toString());
+
             parsedTrailersData = new String[movieArray.length()];
             for (int i = 0; i < movieArray.length(); i++) {
 
@@ -129,11 +155,11 @@ public final class OpenMovieJsonUtils {
 
             }
 
-        return parsedTrailersData;
-        }else{
+            return parsedTrailersData;
+        } else {
             parsedTrailersData = new String[1];
 
-            parsedTrailersData[0]=" No reviews to show ";
+            parsedTrailersData[0] = " No reviews to show ";
             return parsedTrailersData;
 
         }

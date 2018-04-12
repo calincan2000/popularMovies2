@@ -3,6 +3,8 @@ package com.example.mircea.movieapp;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -11,14 +13,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mircea.movieapp.Adapter.MovieAdapter;
 import com.example.mircea.movieapp.Adapter.TrailerAdapter;
 import com.example.mircea.movieapp.model.Movie;
+import com.example.mircea.movieapp.model.Review;
 import com.example.mircea.movieapp.model.Trailers;
 import com.example.mircea.movieapp.utils.JsonUtils;
 import com.example.mircea.movieapp.utils.OpenMovieJsonUtils;
@@ -51,6 +52,8 @@ public class DetailActivity extends AppCompatActivity
     private static final String LOG = MovieAdapter.class.getSimpleName();
     public List<Movie> movieResultsData = MainActivity.mMovieData;
     public static ArrayList<Trailers> mTrailersData = null;
+    public static ArrayList<Review> mReviewsData = null;
+
     public String textEntered = null;
     private Context mContext;
     String idx = null;
@@ -219,6 +222,53 @@ public class DetailActivity extends AppCompatActivity
 
         @Override
         public void onLoaderReset(Loader<String[]> loader) {
+
+        }
+    };
+    private LoaderManager.LoaderCallbacks<ArrayList<Review>>ReviewsLoaderListener
+            =new LoaderManager.LoaderCallbacks<ArrayList<Review>>() {
+
+        @Override
+        public Loader<ArrayList<Review>> onCreateLoader(int id,  Bundle args) {
+            return new AsyncTaskLoader<ArrayList<Review>>(DetailActivity.this) {
+                @Override
+                protected void onStartLoading() {
+                    forceLoad();
+                }
+
+                @Override
+                public ArrayList<Review> loadInBackground() {
+                    URL ReviewRequestUrl = JsonUtils.createUrl(JsonUtils.buildUrl(idx + "/reviews").toString());
+                    String reviewSearchResults = null;
+                    ArrayList<Review> trailerResultData = new ArrayList<>();
+
+                    try {
+                        reviewSearchResults = JsonUtils
+                                .getResponseFromHttpUrl(ReviewRequestUrl);
+                        trailerResultData.addAll(OpenMovieJsonUtils.parseReviewsJson(reviewSearchResults));
+
+                        return trailerResultData;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+                public void deliverResult(ArrayList<Review> data) {
+                    mReviewsData = data;
+                    super.deliverResult(data);
+                }
+            };
+        }
+
+        @Override
+        public void onLoadFinished( Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
+            Log.i(LOG, "xxxxxxxxxxxxb1xx " + data.toString());
+
+        }
+
+        @Override
+        public void onLoaderReset( Loader<ArrayList<Review>> loader) {
 
         }
     };
