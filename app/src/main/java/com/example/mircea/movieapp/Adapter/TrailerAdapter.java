@@ -28,7 +28,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
     private final TrailerAdapterOnClickHandler mClickHandler;
 
     public interface TrailerAdapterOnClickHandler {
-        void onClick(String movieItem);
+        void onClick(String TrailerItem);
     }
 
     // Add an interface called ListItemClickListener
@@ -87,6 +87,11 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
 
 
 
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.example.mircea.movieapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,6 +87,9 @@ public class DetailActivity extends AppCompatActivity
             mTrailers.setHasFixedSize(true);
             mAdapter = new TrailerAdapter(DetailActivity.this, new ArrayList<Trailers>(), DetailActivity.this);
             mTrailers.setAdapter(mAdapter);
+
+
+
 
             getSupportLoaderManager().initLoader(0, null, TrailerLoaderListener);
             getSupportLoaderManager().initLoader(1, null, ReviewsResultLoaderListener);
@@ -264,6 +270,7 @@ public class DetailActivity extends AppCompatActivity
         public void onLoadFinished(Loader<ArrayList<Trailers>> loader, ArrayList<Trailers> data) {
             mAdapter.setTrailersData(data);
 
+
         }
 
         @Override
@@ -274,7 +281,22 @@ public class DetailActivity extends AppCompatActivity
 
 
     @Override
-    public void onClick(String movieItem) {
+    public void onClick(String TrailerItem) {
+
+        Context context = this;
+
+
+        Log.i(LOG, "xxxxxxxxxxxxb " + mTrailersData.get(Integer.parseInt(TrailerItem)).getTrailer());
+
+        // Convert the String URL into a URI object (to pass into the Intent constructor)
+        Uri resultUri = Uri.parse( mTrailersData.get(Integer.parseInt(TrailerItem)).getTrailer() );
+
+        // Create a new intent to view the Trailer URI
+        Intent websiteIntent = new Intent( Intent.ACTION_VIEW, resultUri );
+
+        // Send the intent to launch a new activity
+        startActivity( websiteIntent );
+
 
     }
 }

@@ -16,6 +16,6 @@
     <string name="detail_overview1">A plot synopsis:</string>
     <string name="detail_vote_average1">User Rating:</string>
     <string name="detail_release_date1">Release Date:</string>
-    <string name="detail_trailers">Trailers</string>
+    <string name="detail_trailers">Trailers:</string>
 
 </resources>
