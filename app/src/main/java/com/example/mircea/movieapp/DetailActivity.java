@@ -2,8 +2,6 @@ package com.example.mircea.movieapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -12,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -265,7 +262,7 @@ public class DetailActivity extends AppCompatActivity
 
         @Override
         public void onLoadFinished(Loader<ArrayList<Trailers>> loader, ArrayList<Trailers> data) {
-            mAdapter.setMovieData(data);
+            mAdapter.setTrailersData(data);
 
         }
 
