@@ -29,7 +29,7 @@ public class Movie {
     private String releaseDate;
 
     public Movie(String originalTitle, String moviePosterImageThumblail,
-                 String overview, String vote_average, String releaseDatel,String id) {
+                 String overview, String vote_average, String releaseDate,String id) {
         this.originalTitle = originalTitle;
         this.moviePosterImageThumblail = moviePosterImageThumblail;
         this.overview = overview;

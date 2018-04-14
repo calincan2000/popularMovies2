@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mircea.movieapp.Adapter.MovieAdapter;
+import com.example.mircea.movieapp.Adapter.ReviewsAdapter;
 import com.example.mircea.movieapp.Adapter.TrailerAdapter;
 import com.example.mircea.movieapp.model.Movie;
 import com.example.mircea.movieapp.model.Review;
@@ -33,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity
-        implements TrailerAdapter.TrailerAdapterOnClickHandler {
+        implements TrailerAdapter.TrailerAdapterOnClickHandler, ReviewsAdapter.ReviewAdapterOnClickHandler {
 
     @BindView(R.id.image_iv)
     ImageView mImageDetail;
@@ -47,7 +48,10 @@ public class DetailActivity extends AppCompatActivity
     TextView mReleaseDate;
     @BindView(R.id.trailers)
     RecyclerView mTrailers;
+    @BindView(R.id.reviews)
+    RecyclerView mReviews;
 
+    private ReviewsAdapter mReviewAdapter;
     private TrailerAdapter mAdapter;
     private static final String LOG = MovieAdapter.class.getSimpleName();
     public List<Movie> movieResultsData = MainActivity.mMovieData;
@@ -78,11 +82,16 @@ public class DetailActivity extends AppCompatActivity
                     .error(R.drawable.user_placeholder_error)
                     .into(mImageDetail);
             idx = movieResultsData.get(Integer.parseInt(textEntered)).getId();
-            Log.i(LOG, "xxxxxxxxxxxxbid " + idx);
+            Log.i(LOG, "xxxxxxxxxxxxbidbbb " + movieResultsData.get(Integer.parseInt(textEntered)).getReleaseDate());
 
             LinearLayoutManager layoutManager =
-                    new LinearLayoutManager(DetailActivity.this,LinearLayoutManager.VERTICAL,false);
+                    new LinearLayoutManager(DetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
             mTrailers.setLayoutManager(layoutManager);
+
+            LinearLayoutManager reviewLayoutManager=
+                    new LinearLayoutManager(DetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
+            mReviews.setLayoutManager(reviewLayoutManager);
+
             /*
          * Use this setting to improve performance if you know that changes in content do not
          * change the child layout size in the RecyclerView
@@ -91,11 +100,15 @@ public class DetailActivity extends AppCompatActivity
             mAdapter = new TrailerAdapter(DetailActivity.this, new ArrayList<Trailers>(), DetailActivity.this);
             mTrailers.setAdapter(mAdapter);
 
+            mReviews.setHasFixedSize(true);
+            mReviewAdapter= new ReviewsAdapter(DetailActivity.this,new ArrayList<Review>(),DetailActivity.this);
+            mReviews.setAdapter(mReviewAdapter);
+
 
 
 
             getSupportLoaderManager().initLoader(0, null, TrailerLoaderListener);
-            getSupportLoaderManager().initLoader(1, null, ReviewsResultLoaderListener);
+            getSupportLoaderManager().initLoader(1, null, ReviewsLoaderListener);
 
 
         }
@@ -263,7 +276,8 @@ public class DetailActivity extends AppCompatActivity
 
         @Override
         public void onLoadFinished( Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
-            Log.i(LOG, "xxxxxxxxxxxxb1xx " + data.toString());
+            mReviewAdapter.setReviewsData(data);
+
 
         }
 
@@ -349,4 +363,6 @@ public class DetailActivity extends AppCompatActivity
 
 
     }
+
+
 }

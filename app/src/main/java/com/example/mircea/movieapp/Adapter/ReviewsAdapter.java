@@ -29,6 +29,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
 
     private final ReviewAdapterOnClickHandler mClickHandler;
 
+
+
     public interface ReviewAdapterOnClickHandler {
         void onClick(String ReviewItem);
     }
@@ -87,7 +89,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
                 .error(R.drawable.user_placeholder_error)
                 .into(holder.listItemReviewView);*/
 
-        final boolean isExpanded = position == mExpandedPosition;
+        String review = mReviewsList.get(position).getReview();
+        holder.listItemReviewView.setText(review);
+
+      /* final boolean isExpanded = position == mExpandedPosition;
         holder.listItemReviewView.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.itemView.setActivated(isExpanded);
 
@@ -101,7 +106,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
                 notifyItemChanged(previousExpandedPosition);
                 notifyItemChanged(position);
             }
-        });
+        });*/
 
 
     }
@@ -153,7 +158,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
      * @param reviewData The new movie data to be displayed.
      */
 
-    public void setTrailersData(List<Review> reviewData) {
+    public void setReviewsData(List<Review> reviewData) {
         mReviewsList = reviewData;
         notifyDataSetChanged();
     }

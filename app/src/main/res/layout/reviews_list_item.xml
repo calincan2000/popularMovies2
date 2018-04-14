@@ -4,13 +4,11 @@
     android:animateLayoutChanges="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorBlack">
+    android:background="@color/colorAzur">
 
     <TextView
         android:id="@+id/thumbnail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical|start"
-        android:adjustViewBounds="true"
-        />
+        android:layout_height="200dp"
+        android:text="@string/detail_reviews" />
 </FrameLayout>

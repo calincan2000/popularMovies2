@@ -54,6 +54,8 @@ public final class OpenMovieJsonUtils {
             movie = new Movie(original_title, base + poster_path, overview, vote_average, release_date, id);
             movies.add(movie);
 
+
+
         }
 
         return movies;
