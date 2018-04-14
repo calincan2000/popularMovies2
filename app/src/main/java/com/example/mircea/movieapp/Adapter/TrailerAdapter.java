@@ -10,6 +10,8 @@ import android.widget.ImageView;
 
 import com.example.mircea.movieapp.R;
 import com.example.mircea.movieapp.model.Trailers;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -35,10 +37,11 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
     // Within that interface, define a void method called onListItemClick that takes an int as a parameter
 
     public TrailerAdapter(Context context, List<Trailers> mTrailersList, TrailerAdapterOnClickHandler clickHandler) {
-       mClickHandler=clickHandler;
-       this.mTrailersList =mTrailersList;
-       this.mContext=context;
+        mClickHandler = clickHandler;
+        this.mTrailersList = mTrailersList;
+        this.mContext = context;
     }
+
     /**
      * This gets called when each new ViewHolder is created. This happens when the RecyclerView
      * is laid out. Enough ViewHolders will be created to fill the screen and allow for scrolling.
@@ -75,16 +78,34 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
 
 
     @Override
-    public void onBindViewHolder(TrailersAdapterViewHolder holder, int position) {
-        Trailers trailerItem= mTrailersList.get(position);
-       // Log.i(LOG, "#" + position);
+    public void onBindViewHolder(final TrailersAdapterViewHolder holder, int position) {
+        final Trailers trailerItem = mTrailersList.get(position);
+       /*// Log.i(LOG, "#" + position);
        // holder.listItemReviewView.setText(trailerItem);
         Picasso.get().load(trailerItem.getMoviePosterImageThumblail())
                 .placeholder(R.drawable.user_placeholder)
                 .error(R.drawable.user_placeholder_error)
-                .into(holder.listItemTrailerView);
+                .into(holder.listItemTrailerView);*/
 
+        // Try loading image from device memory or cache*/
+        Picasso.get()
+                .load(trailerItem.getMoviePosterImageThumblail())
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(holder.listItemTrailerView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        // Yay again!
+                    }
 
+                    @Override
+                    public void onError(Exception e) {
+                        // Try again online, if cache loading failed
+                        Picasso.get()
+                                .load(trailerItem.getMoviePosterImageThumblail())
+                                .error(R.drawable.user_placeholder_error)
+                                .into(holder.listItemTrailerView);
+                    }
+                });
 
 
     }
@@ -111,7 +132,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
 
         public TrailersAdapterViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this,view);
+            ButterKnife.bind(this, view);
             view.setOnClickListener(this);
 
         }
@@ -126,6 +147,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
 
 
     }
+
     /**
      * This method is used to set the movie forecast on a ForecastAdapter if we've already
      * created one. This is handy when we get new data from the web but don't want to create a
@@ -134,9 +156,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
      * @param movieData The new movie data to be displayed.
      */
 
-    public void setTrailersData(List<Trailers> movieData)
-    {
-        mTrailersList =movieData;
+    public void setTrailersData(List<Trailers> movieData) {
+        mTrailersList = movieData;
         notifyDataSetChanged();
     }
 }

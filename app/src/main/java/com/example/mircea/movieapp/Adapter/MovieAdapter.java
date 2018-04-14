@@ -10,6 +10,8 @@ import android.view.View.OnClickListener;
 
 import com.example.mircea.movieapp.R;
 import com.example.mircea.movieapp.model.Movie;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,11 +36,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     // Add an interface called ListItemClickListener
     // Within that interface, define a void method called onListItemClick that takes an int as a parameter
 
-    public MovieAdapter(Context context, List<Movie> mMoviesList,MovieAdapterOnClickHandler clickHandler) {
-       mClickHandler=clickHandler;
-       this.mMoviesList=mMoviesList;
-       this.mContext=context;
+    public MovieAdapter(Context context, List<Movie> mMoviesList, MovieAdapterOnClickHandler clickHandler) {
+        mClickHandler = clickHandler;
+        this.mMoviesList = mMoviesList;
+        this.mContext = context;
     }
+
     /**
      * This gets called when each new ViewHolder is created. This happens when the RecyclerView
      * is laid out. Enough ViewHolders will be created to fill the screen and allow for scrolling.
@@ -76,14 +79,35 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
 
     @Override
-    public void onBindViewHolder(MovieAdapterViewHolder holder, int position) {
-        Movie movieItem=mMoviesList.get(position);
-       // Log.i(LOG, "#" + position);
+    public void onBindViewHolder(final MovieAdapterViewHolder holder, int position) {
+        final Movie movieItem = mMoviesList.get(position);
+        // Log.i(LOG, "#" + position);
         //holder.gridItemMovieView.setText(movieItem);
-        Picasso.get().load(movieItem.getMoviePosterImageThumblail())
+    /*    Picasso.get().load(movieItem.getMoviePosterImageThumblail())
                 .placeholder(R.drawable.user_placeholder)
                 .error(R.drawable.user_placeholder_error)
                 .into(holder.gridItemMovieView);
+*/
+        // Try loading image from device memory or cache*/
+        Picasso.get()
+                .load(movieItem.getMoviePosterImageThumblail())
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(holder.gridItemMovieView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        // Yay again!
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        // Try again online, if cache loading failed
+                        Picasso.get()
+                                .load(movieItem.getMoviePosterImageThumblail())
+                                .error(R.drawable.user_placeholder_error)
+                                .into(holder.gridItemMovieView);
+                    }
+                });
+
     }
 
     @Override
@@ -103,7 +127,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
         public MovieAdapterViewHolder(View view) {
             super(view);
-            ButterKnife.bind(this,view);
+            ButterKnife.bind(this, view);
             view.setOnClickListener(this);
 
         }
@@ -118,6 +142,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
 
     }
+
     /**
      * This method is used to set the movie forecast on a ForecastAdapter if we've already
      * created one. This is handy when we get new data from the web but don't want to create a
@@ -126,9 +151,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
      * @param movieData The new movie data to be displayed.
      */
 
-    public void setMovieData(List<Movie> movieData)
-    {
-        mMoviesList=movieData;
+    public void setMovieData(List<Movie> movieData) {
+        mMoviesList = movieData;
         notifyDataSetChanged();
     }
 }

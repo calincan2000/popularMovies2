@@ -141,7 +141,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/detail_reviews"
             app:layout_constraintEnd_toEndOf="@+id/trailers"
             app:layout_constraintStart_toStartOf="@+id/trailers"
             app:layout_constraintTop_toBottomOf="@+id/trailers" />

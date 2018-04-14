@@ -145,7 +145,6 @@ public final class OpenMovieJsonUtils {
 
         if (forecastJson.getJSONArray(OWN_LIST).length() != 0) {
             movieArray = forecastJson.getJSONArray(OWN_LIST);
-            Log.i(LOG, "xxxxxxxxxxxxb1 " + movieArray.toString());
 
             parsedTrailersData = new String[movieArray.length()];
             for (int i = 0; i < movieArray.length(); i++) {
@@ -153,6 +152,8 @@ public final class OpenMovieJsonUtils {
                 JSONObject currentMovie = movieArray.getJSONObject(i);
                 String url = currentMovie.optString(CONTENT);
                 parsedTrailersData[i] = url;
+                Log.i(LOG, "xxxxxxxxxxxxb1 " + currentMovie.optString(CONTENT));
+
 
 
             }
