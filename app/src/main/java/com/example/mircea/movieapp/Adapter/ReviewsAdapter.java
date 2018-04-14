@@ -2,6 +2,7 @@ package com.example.mircea.movieapp.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -91,6 +92,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
 
         String review = mReviewsList.get(position).getReview();
         holder.listItemReviewView.setText(review);
+
+
 
       /* final boolean isExpanded = position == mExpandedPosition;
         holder.listItemReviewView.setVisibility(isExpanded ? View.VISIBLE : View.GONE);

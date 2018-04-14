@@ -49,7 +49,7 @@ public class DetailActivity extends AppCompatActivity
     @BindView(R.id.trailers)
     RecyclerView mTrailers;
     @BindView(R.id.reviews)
-    RecyclerView mReviews;
+    TextView mReviews;
 
     private ReviewsAdapter mReviewAdapter;
     private TrailerAdapter mAdapter;
@@ -85,12 +85,12 @@ public class DetailActivity extends AppCompatActivity
             Log.i(LOG, "xxxxxxxxxxxxbidbbb " + movieResultsData.get(Integer.parseInt(textEntered)).getReleaseDate());
 
             LinearLayoutManager layoutManager =
-                    new LinearLayoutManager(DetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
+                    new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false);
             mTrailers.setLayoutManager(layoutManager);
 
-            LinearLayoutManager reviewLayoutManager=
-                    new LinearLayoutManager(DetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
-            mReviews.setLayoutManager(reviewLayoutManager);
+     /*       LinearLayoutManager reviewLayoutManager =
+                    new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false);
+            mReviews.setLayoutManager(reviewLayoutManager)*/;
 
             /*
          * Use this setting to improve performance if you know that changes in content do not
@@ -100,15 +100,14 @@ public class DetailActivity extends AppCompatActivity
             mAdapter = new TrailerAdapter(DetailActivity.this, new ArrayList<Trailers>(), DetailActivity.this);
             mTrailers.setAdapter(mAdapter);
 
-            mReviews.setHasFixedSize(true);
+        /*    mReviews.setHasFixedSize(true);
             mReviewAdapter= new ReviewsAdapter(DetailActivity.this,new ArrayList<Review>(),DetailActivity.this);
             mReviews.setAdapter(mReviewAdapter);
-
-
+*/
 
 
             getSupportLoaderManager().initLoader(0, null, TrailerLoaderListener);
-            getSupportLoaderManager().initLoader(1, null, ReviewsLoaderListener);
+            getSupportLoaderManager().initLoader(1, null, ReviewsResultLoaderListener);
 
 
         }
@@ -231,6 +230,10 @@ public class DetailActivity extends AppCompatActivity
         @Override
         public void onLoadFinished(Loader<String[]> loader, String[] data) {
             Log.i(LOG, "xxxxxxxxxxxxb1 " + data[0].toString());
+
+            for (String datad : data) {
+                mReviews.append(datad + "\n\n\n");
+            }
         }
 
         @Override
@@ -238,11 +241,11 @@ public class DetailActivity extends AppCompatActivity
 
         }
     };
-    private LoaderManager.LoaderCallbacks<ArrayList<Review>>ReviewsLoaderListener
-            =new LoaderManager.LoaderCallbacks<ArrayList<Review>>() {
+    private LoaderManager.LoaderCallbacks<ArrayList<Review>> ReviewsLoaderListener
+            = new LoaderManager.LoaderCallbacks<ArrayList<Review>>() {
 
         @Override
-        public Loader<ArrayList<Review>> onCreateLoader(int id,  Bundle args) {
+        public Loader<ArrayList<Review>> onCreateLoader(int id, Bundle args) {
             return new AsyncTaskLoader<ArrayList<Review>>(DetailActivity.this) {
                 @Override
                 protected void onStartLoading() {
@@ -267,6 +270,7 @@ public class DetailActivity extends AppCompatActivity
                         return null;
                     }
                 }
+
                 public void deliverResult(ArrayList<Review> data) {
                     mReviewsData = data;
                     super.deliverResult(data);
@@ -275,14 +279,14 @@ public class DetailActivity extends AppCompatActivity
         }
 
         @Override
-        public void onLoadFinished( Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
+        public void onLoadFinished(Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
             mReviewAdapter.setReviewsData(data);
 
 
         }
 
         @Override
-        public void onLoaderReset( Loader<ArrayList<Review>> loader) {
+        public void onLoaderReset(Loader<ArrayList<Review>> loader) {
 
         }
     };
@@ -300,7 +304,7 @@ public class DetailActivity extends AppCompatActivity
                         mTrailersData=null;
                     } else {
                         // mLoadingIndicator.setVisibility(View.VISIBLE);*/
-                        forceLoad();
+                    forceLoad();
 
                 }
 
@@ -353,13 +357,13 @@ public class DetailActivity extends AppCompatActivity
         Log.i(LOG, "xxxxxxxxxxxxb " + mTrailersData.get(Integer.parseInt(TrailerItem)).getTrailer());
 
         // Convert the String URL into a URI object (to pass into the Intent constructor)
-        Uri resultUri = Uri.parse( mTrailersData.get(Integer.parseInt(TrailerItem)).getTrailer() );
+        Uri resultUri = Uri.parse(mTrailersData.get(Integer.parseInt(TrailerItem)).getTrailer());
 
         // Create a new intent to view the Trailer URI
-        Intent websiteIntent = new Intent( Intent.ACTION_VIEW, resultUri );
+        Intent websiteIntent = new Intent(Intent.ACTION_VIEW, resultUri);
 
         // Send the intent to launch a new activity
-        startActivity( websiteIntent );
+        startActivity(websiteIntent);
 
 
     }

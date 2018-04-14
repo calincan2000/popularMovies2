@@ -151,7 +151,7 @@ public final class OpenMovieJsonUtils {
             for (int i = 0; i < movieArray.length(); i++) {
 
                 JSONObject currentMovie = movieArray.getJSONObject(i);
-                String url = currentMovie.optString(URL);
+                String url = currentMovie.optString(CONTENT);
                 parsedTrailersData[i] = url;
 
 
