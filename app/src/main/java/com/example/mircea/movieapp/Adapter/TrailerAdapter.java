@@ -83,14 +83,15 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
        /*// Log.i(LOG, "#" + position);
        // holder.listItemReviewView.setText(trailerItem);
         Picasso.get().load(trailerItem.getMoviePosterImageThumblail())
-                .placeholder(R.drawable.user_placeholder)
-                .error(R.drawable.user_placeholder_error)
+                .placeholder(R.drawable.user_placeholder1)
+                .error(R.drawable.user_placeholder_error1)
                 .into(holder.listItemTrailerView);*/
 
         // Try loading image from device memory or cache*/
         Picasso.get()
                 .load(trailerItem.getMoviePosterImageThumblail())
                 .networkPolicy(NetworkPolicy.OFFLINE)
+                .placeholder(R.drawable.user_placeholder)
                 .into(holder.listItemTrailerView, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -102,6 +103,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
                         // Try again online, if cache loading failed
                         Picasso.get()
                                 .load(trailerItem.getMoviePosterImageThumblail())
+                                .placeholder(R.drawable.user_placeholder)
                                 .error(R.drawable.user_placeholder_error)
                                 .into(holder.listItemTrailerView);
                     }

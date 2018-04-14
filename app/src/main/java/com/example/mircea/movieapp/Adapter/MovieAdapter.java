@@ -84,18 +84,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         // Log.i(LOG, "#" + position);
         //holder.gridItemMovieView.setText(movieItem);
     /*    Picasso.get().load(movieItem.getMoviePosterImageThumblail())
-                .placeholder(R.drawable.user_placeholder)
-                .error(R.drawable.user_placeholder_error)
+                .placeholder(R.drawable.user_placeholder1)
+                .error(R.drawable.user_placeholder_error1)
                 .into(holder.gridItemMovieView);
 */
         // Try loading image from device memory or cache*/
         Picasso.get()
                 .load(movieItem.getMoviePosterImageThumblail())
+                .placeholder(R.drawable.user_placeholder)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(holder.gridItemMovieView, new Callback() {
                     @Override
                     public void onSuccess() {
-                        // Yay again!
                     }
 
                     @Override
@@ -103,6 +103,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                         // Try again online, if cache loading failed
                         Picasso.get()
                                 .load(movieItem.getMoviePosterImageThumblail())
+                                .placeholder(R.drawable.user_placeholder)
                                 .error(R.drawable.user_placeholder_error)
                                 .into(holder.gridItemMovieView);
                     }

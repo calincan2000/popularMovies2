@@ -86,8 +86,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
        /*// Log.i(LOG, "#" + position);
         //holder.listItemReviewView.setText(reviewItem);
         Picasso.get().load(reviewItem.getMoviePosterImageThumblail())
-                .placeholder(R.drawable.user_placeholder)
-                .error(R.drawable.user_placeholder_error)
+                .placeholder(R.drawable.user_placeholder1)
+                .error(R.drawable.user_placeholder_error1)
                 .into(holder.listItemReviewView);*/
 
         String review = mReviewsList.get(position).getReview();

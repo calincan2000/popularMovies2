@@ -3,8 +3,6 @@ package com.example.mircea.movieapp;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -24,6 +22,8 @@ import com.example.mircea.movieapp.model.Review;
 import com.example.mircea.movieapp.model.Trailers;
 import com.example.mircea.movieapp.utils.JsonUtils;
 import com.example.mircea.movieapp.utils.OpenMovieJsonUtils;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
@@ -77,10 +77,30 @@ public class DetailActivity extends AppCompatActivity
             mOverview.setText(movieResultsData.get(Integer.parseInt(textEntered)).getOverview());
             mReleaseDate.setText(movieResultsData.get(Integer.parseInt(textEntered)).getReleaseDate());
             mVoteAverage.setText(movieResultsData.get(Integer.parseInt(textEntered)).getVote_average());
-            Picasso.get().load(movieResultsData.get(Integer.parseInt(textEntered)).getMoviePosterImageThumblail())
-                    .placeholder(R.drawable.user_placeholder)
+       /*     Picasso.get().load(movieResultsData.get(Integer.parseInt(textEntered)).getMoviePosterImageThumblail())
+                    .placeholder(R.drawable.user_placeholder1)
                     .error(R.drawable.user_placeholder_error)
-                    .into(mImageDetail);
+                    .into(mImageDetail);*/
+
+            Picasso.get()
+                    .load(movieResultsData.get(Integer.parseInt(textEntered)).getMoviePosterImageThumblail())
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .placeholder(R.drawable.user_placeholder)
+                    .into(mImageDetail, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+                        @Override
+                        public void onError(Exception e) {
+                            // Try again online, if cache loading failed
+                            Picasso.get()
+                                    .load(movieResultsData.get(Integer.parseInt(textEntered)).getMoviePosterImageThumblail())
+                                    .placeholder(R.drawable.user_placeholder)
+                                    .error(R.drawable.user_placeholder_error)
+                                    .into(mImageDetail);
+                        }
+                    });
             idx = movieResultsData.get(Integer.parseInt(textEntered)).getId();
             Log.i(LOG, "xxxxxxxxxxxxbidbbb " + movieResultsData.get(Integer.parseInt(textEntered)).getReleaseDate());
 
@@ -90,7 +110,8 @@ public class DetailActivity extends AppCompatActivity
 
      /*       LinearLayoutManager reviewLayoutManager =
                     new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false);
-            mReviews.setLayoutManager(reviewLayoutManager)*/;
+            mReviews.setLayoutManager(reviewLayoutManager)*/
+            ;
 
             /*
          * Use this setting to improve performance if you know that changes in content do not

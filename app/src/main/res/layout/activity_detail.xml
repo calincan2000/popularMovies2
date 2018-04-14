@@ -39,10 +39,11 @@
             android:id="@+id/overview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/detail_overview"
             app:layout_constraintEnd_toEndOf="@+id/vote_average"
             app:layout_constraintStart_toStartOf="@+id/vote_average"
-            app:layout_constraintTop_toTopOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/vote_average" />
 
         <TextView
             android:id="@+id/vote_average"
@@ -99,11 +100,10 @@
             android:id="@+id/textView4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="@string/detail_overview1"
             app:layout_constraintEnd_toEndOf="@+id/textView3"
             app:layout_constraintStart_toStartOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toTopOf="@+id/overview" />
 
         <TextView
             android:id="@+id/textView5"
@@ -118,8 +118,6 @@
             android:id="@+id/textView6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
             android:text="@string/detail_reviews"
             app:layout_constraintEnd_toEndOf="@+id/textView5"
             app:layout_constraintStart_toStartOf="@+id/textView5"
@@ -140,7 +138,7 @@
             android:id="@+id/reviews"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="@+id/trailers"
             app:layout_constraintStart_toStartOf="@+id/trailers"
             app:layout_constraintTop_toBottomOf="@+id/trailers" />
