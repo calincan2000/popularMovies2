@@ -51,7 +51,6 @@ public class DetailActivity extends AppCompatActivity
     @BindView(R.id.reviews)
     TextView mReviews;
 
-    private ReviewsAdapter mReviewAdapter;
     private TrailerAdapter mAdapter;
     private static final String LOG = MovieAdapter.class.getSimpleName();
     public List<Movie> movieResultsData = MainActivity.mMovieData;
@@ -61,9 +60,6 @@ public class DetailActivity extends AppCompatActivity
     public String textEntered = null;
     private Context mContext;
     String idx = null;
-    /*   @BindView(R.id.pb_loading_indicator)
-       ProgressBar mLoadingIndicator;*/
-    String searchUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +69,11 @@ public class DetailActivity extends AppCompatActivity
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
             textEntered = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
+
             mOriginalTitle.setText(movieResultsData.get(Integer.parseInt(textEntered)).getOriginalTitle());
             mOverview.setText(movieResultsData.get(Integer.parseInt(textEntered)).getOverview());
             mReleaseDate.setText(movieResultsData.get(Integer.parseInt(textEntered)).getReleaseDate());
             mVoteAverage.setText(movieResultsData.get(Integer.parseInt(textEntered)).getVote_average());
-       /*     Picasso.get().load(movieResultsData.get(Integer.parseInt(textEntered)).getMoviePosterImageThumblail())
-                    .placeholder(R.drawable.user_placeholder1)
-                    .error(R.drawable.user_placeholder_error)
-                    .into(mImageDetail);*/
 
             Picasso.get()
                     .load(movieResultsData.get(Integer.parseInt(textEntered)).getMoviePosterImageThumblail())
@@ -102,29 +95,18 @@ public class DetailActivity extends AppCompatActivity
                         }
                     });
             idx = movieResultsData.get(Integer.parseInt(textEntered)).getId();
-            Log.i(LOG, "xxxxxxxxxxxxbidbbb " + movieResultsData.get(Integer.parseInt(textEntered)).getReleaseDate());
+            Log.i(LOG, "xxxxxxxxxxxxYYYYZZZZBBB " + idx);
 
             LinearLayoutManager layoutManager =
                     new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false);
             mTrailers.setLayoutManager(layoutManager);
 
-     /*       LinearLayoutManager reviewLayoutManager =
-                    new LinearLayoutManager(DetailActivity.this, LinearLayoutManager.HORIZONTAL, false);
-            mReviews.setLayoutManager(reviewLayoutManager)*/
-            ;
 
-            /*
-         * Use this setting to improve performance if you know that changes in content do not
-         * change the child layout size in the RecyclerView
-         */
             mTrailers.setHasFixedSize(true);
             mAdapter = new TrailerAdapter(DetailActivity.this, new ArrayList<Trailers>(), DetailActivity.this);
             mTrailers.setAdapter(mAdapter);
 
-        /*    mReviews.setHasFixedSize(true);
-            mReviewAdapter= new ReviewsAdapter(DetailActivity.this,new ArrayList<Review>(),DetailActivity.this);
-            mReviews.setAdapter(mReviewAdapter);
-*/
+
 
 
             getSupportLoaderManager().initLoader(0, null, TrailerLoaderListener);
@@ -134,69 +116,6 @@ public class DetailActivity extends AppCompatActivity
         }
     }
 
-
-    private LoaderManager.LoaderCallbacks<String[]> TrailerResultLoaderListener
-            = new LoaderManager.LoaderCallbacks<String[]>() {
-
-        @Override
-        public Loader<String[]> onCreateLoader(int id, Bundle args) {
-            return new AsyncTaskLoader<String[]>(DetailActivity.this) {
-                String[] mTrailerData = null;
-
-                @Override
-                protected void onStartLoading() {
-                    if (mTrailerData != null) {
-                        deliverResult(mTrailerData);
-                    } else {
-                        // mLoadingIndicator.setVisibility(View.VISIBLE);
-                        forceLoad();
-                    }
-                }
-
-                @Override
-                public String[] loadInBackground() {
-                    URL TrailerRequestUrl = JsonUtils.createUrl(JsonUtils.buildUrl(idx + "/videos").toString());
-                    String TrailerSearchResults = null;
-
-
-                    try {
-
-                        TrailerSearchResults = JsonUtils
-                                .getResponseFromHttpUrl(TrailerRequestUrl);
-
-                        String[] TrailerResultData = OpenMovieJsonUtils.getSimpleTrailersStringsFromJson(TrailerSearchResults);
-
-                        return TrailerResultData;
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-
-                /**
-                 * Sends the result of the load to the registered listener.
-                 *
-                 * @param data The result of the load
-                 */
-
-                public void deliverResult(String[] data) {
-                    mTrailerData = data;
-                    super.deliverResult(data);
-                }
-            };
-        }
-
-        @Override
-        public void onLoadFinished(Loader<String[]> loader, String[] data) {
-            Log.i(LOG, "xxxxxxxxxxxxb2 " + data[0].toString());
-        }
-
-        @Override
-        public void onLoaderReset(Loader<String[]> loader) {
-
-        }
-    };
     private LoaderManager.LoaderCallbacks<String[]> ReviewsResultLoaderListener
             = new LoaderManager.LoaderCallbacks<String[]>() {
         @Override
@@ -250,7 +169,6 @@ public class DetailActivity extends AppCompatActivity
 
         @Override
         public void onLoadFinished(Loader<String[]> loader, String[] data) {
-            Log.i(LOG, "xxxxxxxxxxxxb1 " + data[0].toString());
 
             for (String datad : data) {
                 mReviews.append(datad + "\n\n\n");
@@ -262,56 +180,6 @@ public class DetailActivity extends AppCompatActivity
 
         }
     };
-    private LoaderManager.LoaderCallbacks<ArrayList<Review>> ReviewsLoaderListener
-            = new LoaderManager.LoaderCallbacks<ArrayList<Review>>() {
-
-        @Override
-        public Loader<ArrayList<Review>> onCreateLoader(int id, Bundle args) {
-            return new AsyncTaskLoader<ArrayList<Review>>(DetailActivity.this) {
-                @Override
-                protected void onStartLoading() {
-                    forceLoad();
-                }
-
-                @Override
-                public ArrayList<Review> loadInBackground() {
-                    URL ReviewRequestUrl = JsonUtils.createUrl(JsonUtils.buildUrl(idx + "/reviews").toString());
-                    String reviewSearchResults = null;
-                    ArrayList<Review> trailerResultData = new ArrayList<>();
-
-                    try {
-                        reviewSearchResults = JsonUtils
-                                .getResponseFromHttpUrl(ReviewRequestUrl);
-                        trailerResultData.addAll(OpenMovieJsonUtils.parseReviewsJson(reviewSearchResults));
-
-                        return trailerResultData;
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-
-                public void deliverResult(ArrayList<Review> data) {
-                    mReviewsData = data;
-                    super.deliverResult(data);
-                }
-            };
-        }
-
-        @Override
-        public void onLoadFinished(Loader<ArrayList<Review>> loader, ArrayList<Review> data) {
-            mReviewAdapter.setReviewsData(data);
-
-
-        }
-
-        @Override
-        public void onLoaderReset(Loader<ArrayList<Review>> loader) {
-
-        }
-    };
-
     private LoaderManager.LoaderCallbacks<ArrayList<Trailers>> TrailerLoaderListener
             = new LoaderManager.LoaderCallbacks<ArrayList<Trailers>>() {
 

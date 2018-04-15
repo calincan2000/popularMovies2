@@ -64,8 +64,6 @@ final static String trailer_BASE_URL ="238/videos?api_key=b2e0baf71e0fed285d22bf
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        Log.i(LOG, "Built URI zzzzzzzzz " + url);
-
         return url;
     }
 

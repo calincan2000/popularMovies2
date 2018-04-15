@@ -127,9 +127,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onClick(String movieItem) {
         Context context = this;
         //  Toast.makeText(this, movieItem, Toast.LENGTH_LONG).show();
-
-        Log.i(LOG, "xxxxxxxxxxxxb " + movieItem);
-
         Class destinationActivity = DetailActivity.class;
         Intent intent = new Intent(context, destinationActivity);
         intent.putExtra(Intent.EXTRA_TEXT, movieItem);
@@ -229,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-// Override onOptionsItemSelected
+    // Override onOptionsItemSelected
     // Within this method, get the ID from the MenuItem
     // If the ID equals R.id.action_refresh, create and set a new adapter on the RecyclerView and return true
     // For now, for all other IDs, return super.onOptionsItemSelected
@@ -246,9 +243,7 @@ public class MainActivity extends AppCompatActivity implements
              * ways of doing this, with this one being the simplest of those
              * ways. (in our humble opinion)
              */
-           /* case R.id.action_refresh:
-                mMoviesList.setAdapter(mAdapter);
-                return true;*/
+
             case R.id.top_rated:
                 mMovieData = null;
                 searchUrl = JsonUtils.buildUrl(TopRated).toString();

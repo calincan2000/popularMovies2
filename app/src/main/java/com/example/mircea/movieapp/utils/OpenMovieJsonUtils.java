@@ -54,8 +54,6 @@ public final class OpenMovieJsonUtils {
             movie = new Movie(original_title, base + poster_path, overview, vote_average, release_date, id);
             movies.add(movie);
 
-
-
         }
 
         return movies;
@@ -152,10 +150,6 @@ public final class OpenMovieJsonUtils {
                 JSONObject currentMovie = movieArray.getJSONObject(i);
                 String url = currentMovie.optString(CONTENT);
                 parsedTrailersData[i] = url;
-                Log.i(LOG, "xxxxxxxxxxxxb1 " + currentMovie.optString(CONTENT));
-
-
-
             }
 
             return parsedTrailersData;

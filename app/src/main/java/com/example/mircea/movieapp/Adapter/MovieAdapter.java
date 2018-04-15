@@ -83,11 +83,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         final Movie movieItem = mMoviesList.get(position);
         // Log.i(LOG, "#" + position);
         //holder.gridItemMovieView.setText(movieItem);
-    /*    Picasso.get().load(movieItem.getMoviePosterImageThumblail())
-                .placeholder(R.drawable.user_placeholder1)
-                .error(R.drawable.user_placeholder_error1)
-                .into(holder.gridItemMovieView);
-*/
+
         // Try loading image from device memory or cache*/
         Picasso.get()
                 .load(movieItem.getMoviePosterImageThumblail())

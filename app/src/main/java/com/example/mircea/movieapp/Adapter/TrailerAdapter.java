@@ -80,13 +80,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.Trailers
     @Override
     public void onBindViewHolder(final TrailersAdapterViewHolder holder, int position) {
         final Trailers trailerItem = mTrailersList.get(position);
-       /*// Log.i(LOG, "#" + position);
-       // holder.listItemReviewView.setText(trailerItem);
-        Picasso.get().load(trailerItem.getMoviePosterImageThumblail())
-                .placeholder(R.drawable.user_placeholder1)
-                .error(R.drawable.user_placeholder_error1)
-                .into(holder.listItemTrailerView);*/
-
         // Try loading image from device memory or cache*/
         Picasso.get()
                 .load(trailerItem.getMoviePosterImageThumblail())

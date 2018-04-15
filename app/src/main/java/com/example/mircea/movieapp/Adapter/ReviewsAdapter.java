@@ -83,35 +83,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsA
     @Override
     public void onBindViewHolder(ReviewsAdapterViewHolder holder, final int position) {
        Review reviewItem= mReviewsList.get(position);
-       /*// Log.i(LOG, "#" + position);
-        //holder.listItemReviewView.setText(reviewItem);
-        Picasso.get().load(reviewItem.getMoviePosterImageThumblail())
-                .placeholder(R.drawable.user_placeholder1)
-                .error(R.drawable.user_placeholder_error1)
-                .into(holder.listItemReviewView);*/
-
         String review = mReviewsList.get(position).getReview();
         holder.listItemReviewView.setText(review);
-
-
-
-      /* final boolean isExpanded = position == mExpandedPosition;
-        holder.listItemReviewView.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-        holder.itemView.setActivated(isExpanded);
-
-        if (isExpanded)
-            previousExpandedPosition = position;
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mExpandedPosition = isExpanded ? -1 : position;
-                notifyItemChanged(previousExpandedPosition);
-                notifyItemChanged(position);
-            }
-        });*/
-
-
     }
 
     @Override
