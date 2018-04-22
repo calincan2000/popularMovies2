@@ -46,6 +46,58 @@ public class MovieContentProvider extends ContentProvider {
         return true;
     }
 
+
+    /**
+     * Handles requests to insert a set of new rows. In Sunshine, we are only going to be
+     * inserting multiple rows of data at a time from a weather forecast. There is no use case
+     * for inserting a single row of data into our ContentProvider, and so we are only going to
+     * implement bulkInsert. In a normal ContentProvider's implementation, you will probably want
+     * to provide proper functionality for the insert method as well.
+     *
+     * @param uri    The content:// URI of the insertion request.
+     * @param values An array of sets of column_name/value pairs to add to the database.
+     *               This must not be {@code null}.
+     *
+     * @return The number of values that were inserted.
+     */
+
+    @Override
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
+        final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
+        switch (sUriMatcher.match(uri)){
+          // Only perform our implementation of bulkInsert if the URI matches the CODE_MOVIES code
+            case CODE_MOVIES:
+                int rowsInserted = 0;
+                try{
+                    for(ContentValues value : values)
+                    {
+                        long movieID =
+                                value.getAsLong(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
+
+
+                        long _id = db.insert(MovieContract.MovieEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            rowsInserted++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+
+                if (rowsInserted > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+
+//               Return the number of rows inserted from our implementation of bulkInsert
+                return rowsInserted;
+
+//           If the URI does match match CODE_WEATHER, return the super implementation of bulkInsert
+            default:
+                return super.bulkInsert(uri, values);
+        }
+    }
+
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection,
