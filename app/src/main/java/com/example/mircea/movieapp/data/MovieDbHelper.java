@@ -15,21 +15,27 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     //The name of the database
     private static final String DATABASE_NAME = "favMovie.db";
     // If you change the database schema, you must increment the database version
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     public MovieDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
     }
 
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create tasks table (careful to follow SQL formatting rules)
-        final String CREATE_TABLE = "CREATE TABLE "  + MovieEntry.TABLE_NAME + " (" +
-                MovieEntry._ID                + " INTEGER PRIMARY KEY, " +
-                MovieEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_PRIORITY    + " INTEGER NOT NULL);";
+        final String CREATE_TABLE = "CREATE TABLE " + MovieEntry.TABLE_NAME + " (" +
+                MovieEntry._ID + " INTEGER PRIMARY KEY, " +
+                MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
+                MovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
+                MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
+                MovieEntry.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL, " +
+                MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
+                MovieEntry.COLUMN_PRIORITY + " INTEGER NOT NULL);";
 
-        db.execSQL(CREATE_TABLE);    }
+        db.execSQL(CREATE_TABLE);
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

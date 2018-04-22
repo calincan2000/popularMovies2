@@ -1,8 +1,13 @@
 package com.example.mircea.movieapp;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -11,8 +16,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mircea.movieapp.Adapter.MovieAdapter;
 import com.example.mircea.movieapp.Adapter.ReviewsAdapter;
@@ -33,6 +42,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import com.example.mircea.movieapp.data.MovieContract;
+
 public class DetailActivity extends AppCompatActivity
         implements TrailerAdapter.TrailerAdapterOnClickHandler, ReviewsAdapter.ReviewAdapterOnClickHandler {
 
@@ -50,6 +61,8 @@ public class DetailActivity extends AppCompatActivity
     RecyclerView mTrailers;
     @BindView(R.id.reviews)
     TextView mReviews;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     private TrailerAdapter mAdapter;
     private static final String LOG = MovieAdapter.class.getSimpleName();
@@ -60,12 +73,15 @@ public class DetailActivity extends AppCompatActivity
     public String textEntered = null;
     private Context mContext;
     String idx = null;
+    private int mPriority = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+        fab.setImageResource(R.mipmap.ic_my_icon2);
         Intent intentThatStartedThisActivity = getIntent();
         if (intentThatStartedThisActivity.hasExtra(Intent.EXTRA_TEXT)) {
             textEntered = intentThatStartedThisActivity.getStringExtra(Intent.EXTRA_TEXT);
@@ -84,6 +100,7 @@ public class DetailActivity extends AppCompatActivity
                         public void onSuccess() {
 
                         }
+
                         @Override
                         public void onError(Exception e) {
                             // Try again online, if cache loading failed
@@ -105,8 +122,6 @@ public class DetailActivity extends AppCompatActivity
             mTrailers.setHasFixedSize(true);
             mAdapter = new TrailerAdapter(DetailActivity.this, new ArrayList<Trailers>(), DetailActivity.this);
             mTrailers.setAdapter(mAdapter);
-
-
 
 
             getSupportLoaderManager().initLoader(0, null, TrailerLoaderListener);
@@ -235,7 +250,63 @@ public class DetailActivity extends AppCompatActivity
 
         }
     };
+    private LoaderManager.LoaderCallbacks<Cursor> QueryLoaderListener
+            = new LoaderManager.LoaderCallbacks<Cursor>() {
 
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            return new AsyncTaskLoader<Cursor>(DetailActivity.this) {
+                // Initialize a Cursor, this will hold all the task data
+                Cursor mMovieData = null;
+
+                // onStartLoading() is called when a loader first starts loading data
+                @Override
+                protected void onStartLoading() {
+                    if (mMovieData != null) {
+                        // Delivers any previously loaded data immediately
+                        deliverResult(mMovieData);
+                    } else {
+                        // Force a new load
+                        forceLoad();
+                    }
+                }
+                // loadInBackground() performs asynchronous loading of data
+                @Override
+                public Cursor loadInBackground() {
+                    // Will implement to load data
+
+                    // Query and load all task data in the background; sort by priority
+                    // [Hint] use a try/catch block to catch any errors in loading data
+                    try {
+                        return getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                                null,
+                                null,
+                                null,
+                                MovieContract.MovieEntry.COLUMN_PRIORITY);
+                    } catch (Exception e) {
+                        Log.i(LOG, "Failed to asynchronusly load data.");
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+                // deliverResult sends the result of the load, a Cursor, to the registered listener
+                public void deliverResult(Cursor data) {
+                    mMovieData = data;
+                    super.deliverResult(data);
+                }
+            };
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
+    };
 
     @Override
     public void onClick(String TrailerItem) {
@@ -255,6 +326,29 @@ public class DetailActivity extends AppCompatActivity
         startActivity(websiteIntent);
 
 
+    }
+
+    /**
+     * onClickAddTask is called when the "ADD" button is clicked.
+     * It retrieves user input and inserts that new task data into the underlying database.
+     */
+    public void onClickAddTask(View view) {
+
+        // Insert new Movie data via a ContentResolver
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MovieContract.MovieEntry.COLUMN_DESCRIPTION, idx);
+        contentValues.put(MovieContract.MovieEntry.COLUMN_PRIORITY, mPriority);
+        Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+
+        // Display the URI that's returned with a Toast
+        // [Hint] Don't forget to call finish() to return to MainActivity after this insert is complete
+        if (uri != null) {
+            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        // Finish activity (this returns back to MainActivity)
+        //finish();
     }
 
 

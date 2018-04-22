@@ -143,6 +143,20 @@
             app:layout_constraintStart_toStartOf="@+id/trailers"
             app:layout_constraintTop_toBottomOf="@+id/trailers" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            app:rippleColor="@color/colorAzur"
+            android:layout_margin="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="8dp"
+            android:onClick="onClickAddTask"/>
+
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>
