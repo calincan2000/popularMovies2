@@ -61,28 +61,18 @@ public class MovieContract {
 
         // Since TaskEntry implements the interface "BaseColumns", it has an automatically produced
         // "_ID" column in addition to the two below
-        /*public Movie(String originalTitle, String moviePosterImageThumblail,
-                 String overview, String vote_average, String releaseDate,String id) {
-  */
+  /* public Movie(String originalTitle, String moviePosterImageThumblail,
+                 String overview, String vote_average, String releaseDate,String id) {*/
         public static final String COLUMN_TITLE = "originalTitle";                          // Type: TEXT
         public static final String COLUMN_POSTER_PATH = "moviePosterImageThumblail";        // Type: TEXT
         public static final String COLUMN_OVERVIEW = "overview";                            // Type: TEXT
         public static final String COLUMN_VOTE_AVERAGE = "vote_average";                    // Type: TEXT
         public static final String COLUMN_RELEASE_DATE = "releaseDate";                     // Type: TEXT
+        public static final String COLUMN_MOVIE_ID = "id";                     // Type: TEXT
+
         public static final String COLUMN_PRIORITY = "fav";                                 // Type: TEXT
 
-/*        public final static String TABLE_NAME =                 "movie_details";
-        public final static String _ID = BaseColumns._ID;                           // Type: INTEGER (Unique ID)
-        public final static String COLUMN_MOVIE_ID =            "movie_id";         // Type: INTEGER
-        public final static String COLUMN_TITLE =               "title";            // Type: TEXT
-        public final static String COLUMN_POSTER_PATH =         "poster_path";      // Type: TEXT
-        public final static String COLUMN_BACKDROP_PATH =       "backdrop_path";    // Type: TEXT
-        public final static String COLUMN_PLOT =                "overview";         // Type: TEXT
-        public final static String COLUMN_RATINGS =             "ratings";          // Type: DOUBLE
-        public final static String COLUMN_RELEASE_DATE =        "release_date";     // Type: TEXT
-        public final static String COLUMN_GENRES =              "genres";           // Type: TEXT
-        public final static String COLUMN_LANGUAGE =            "language";         // Type: TEXT
-public final static String COLUMN_RUNTIME = "runtime"; // Type: INTEGER*/
+
         /*
         The above table structure looks something like the sample table below.
         With the name of the table and columns on top, and potential contents in rows

@@ -32,6 +32,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
                 MovieEntry.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL, " +
                 MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
+                MovieEntry.COLUMN_MOVIE_ID + " TEXT NOT NULL, " +
                 MovieEntry.COLUMN_PRIORITY + " INTEGER NOT NULL);";
 
         db.execSQL(CREATE_TABLE);
