@@ -69,7 +69,6 @@ public class MovieContract {
         public static final String COLUMN_VOTE_AVERAGE = "vote_average";                    // Type: TEXT
         public static final String COLUMN_RELEASE_DATE = "releaseDate";                     // Type: TEXT
         public static final String COLUMN_MOVIE_ID = "id";                     // Type: TEXT
-
         public static final String COLUMN_PRIORITY = "fav";                                 // Type: TEXT
 
 

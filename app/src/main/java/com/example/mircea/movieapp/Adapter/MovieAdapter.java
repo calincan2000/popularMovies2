@@ -1,6 +1,7 @@
 package com.example.mircea.movieapp.Adapter;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.view.View.OnClickListener;
 
+import com.example.mircea.movieapp.MainActivity;
 import com.example.mircea.movieapp.R;
 import com.example.mircea.movieapp.model.Movie;
 import com.squareup.picasso.Callback;
@@ -23,8 +25,9 @@ import butterknife.ButterKnife;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
     private static final String LOG = MovieAdapter.class.getSimpleName();
-    private List<Movie> mMoviesList;
+
     private Context mContext;
+    private Cursor mCursor;
 
 
     private final MovieAdapterOnClickHandler mClickHandler;
@@ -38,7 +41,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     public MovieAdapter(Context context, List<Movie> mMoviesList, MovieAdapterOnClickHandler clickHandler) {
         mClickHandler = clickHandler;
-        this.mMoviesList = mMoviesList;
         this.mContext = context;
     }
 
@@ -80,13 +82,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public void onBindViewHolder(final MovieAdapterViewHolder holder, int position) {
-        final Movie movieItem = mMoviesList.get(position);
+        mCursor.moveToPosition(position);
         // Log.i(LOG, "#" + position);
         //holder.gridItemMovieView.setText(movieItem);
 
         // Try loading image from device memory or cache*/
         Picasso.get()
-                .load(movieItem.getMoviePosterImageThumblail())
+                .load(mCursor.getString(MainActivity.INDEX_POSTER_PATH))
                 .placeholder(R.drawable.user_placeholder)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(holder.gridItemMovieView, new Callback() {
@@ -98,7 +100,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                     public void onError(Exception e) {
                         // Try again online, if cache loading failed
                         Picasso.get()
-                                .load(movieItem.getMoviePosterImageThumblail())
+                                .load(mCursor.getString(MainActivity.INDEX_POSTER_PATH))
                                 .placeholder(R.drawable.user_placeholder)
                                 .error(R.drawable.user_placeholder_error)
                                 .into(holder.gridItemMovieView);
@@ -109,10 +111,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public int getItemCount() {
-        return (null != mMoviesList ? mMoviesList.size() : 0);
+        if (null == mCursor) return 0;
+        return mCursor.getCount();
     }
-
-
+//    Create a new method that allows you to swap Cursors.
+    /**
+     * Swaps the cursor used by the MovieAdapter for its movie data. This method is called by
+     * MainActivity after a load has finished, as well as when the Loader responsible for loading
+     * the weather data is reset. When this method is called, we assume we have a completely new
+     * set of data, so we call notifyDataSetChanged to tell the RecyclerView to update.
+     *
+     * @param newCursor the new cursor to use as ForecastAdapter's data source
+     */
+    public void swapCursor(Cursor newCursor) {
+        mCursor = newCursor;
+//     After the new Cursor is set, call notifyDataSetChanged
+        notifyDataSetChanged();
+    }
     /**
      * Cache of the children views for a list item.
      */
@@ -131,6 +146,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
         @Override
         public void onClick(View view) {
+
             int adapterPosition = getAdapterPosition();
             String movieItem = String.valueOf(adapterPosition);
             mClickHandler.onClick(movieItem);
@@ -140,16 +156,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     }
 
-    /**
+  /*  *//**
      * This method is used to set the movie forecast on a ForecastAdapter if we've already
      * created one. This is handy when we get new data from the web but don't want to create a
      * new MovieAdapter to display it.
      *
      * @param movieData The new movie data to be displayed.
-     */
+     *//*
 
     public void setMovieData(List<Movie> movieData) {
         mMoviesList = movieData;
         notifyDataSetChanged();
-    }
+    }*/
 }

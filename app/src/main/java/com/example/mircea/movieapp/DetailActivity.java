@@ -337,7 +337,6 @@ public class DetailActivity extends AppCompatActivity
         // Insert new Movie data via a ContentResolver
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieContract.MovieEntry.COLUMN_DESCRIPTION, idx);
         contentValues.put(MovieContract.MovieEntry.COLUMN_PRIORITY, mPriority);
         Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
 
